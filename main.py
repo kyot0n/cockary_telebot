@@ -1,3 +1,6 @@
+from background import keep_alive
+import pip
+pip.main(['install', 'pytelegrambotapi'])
 import telebot
 from telebot import types
 
@@ -34,4 +37,5 @@ def callback_query(call):
         bot.send_message(call.message.chat.id, "You selected: Чё перекусить")
 
 # Start the bot
-bot.polling()
+keep_alive()
+bot.polling(non_stop=True, interval=0)
