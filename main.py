@@ -24,6 +24,11 @@ def start(message):
     # Send the message with the keyboard
     bot.send_message(message.chat.id, 'Please choose an option:', reply_markup=keyboard)
 
+@bot.message_handler(commands=['start'])
+def tempq(message):
+    if message.from_user.username == "masker1r":
+        bot.send_message(f"Hello, {message.from_user.username}")
+
 # Define the callback query handler
 @bot.callback_query_handler(func=lambda call: True)
 def callback_query(call):
