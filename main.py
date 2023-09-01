@@ -4,12 +4,15 @@ pip.main(['install', 'pytelegrambotapi'])
 import telebot
 from telebot import types
 
+
 # Create a new bot instance
 bot = telebot.TeleBot('6599981531:AAHut2RrDP_rpG-uVhm9Wwo0wj7T3NTt80A')
+
 
 # Define the handler for the /start command
 @bot.message_handler(commands=['start'])
 def start(message):
+    global old, CHAT_ID
     # Create the keyboard with the four buttons
     keyboard = types.InlineKeyboardMarkup()
     breakfast_button = types.InlineKeyboardButton("Чё на завтрак", callback_data='breakfast')
@@ -22,42 +25,52 @@ def start(message):
     keyboard.row(snack_button)
 
     # Send the message with the keyboard
-    bot.send_message(message.chat.id, 'Please choose an option:', reply_markup=keyboard)
+    CHAT_ID = message.chat.id
+    old = bot.send_message(message.chat.id, 'Выберите:', reply_markup=keyboard)
 
 
-# Define the callback query handler
-@bot.callback_query_handler(func=lambda call: True)
-def cuisine(call):
+@bot.callback_query_handler(func=lambda callback: callback.data in ['breakfast', 'lunch', 'dinner', 'snack'])
+def start_choice(call):
+    bot.delete_message(old.chat.id, old.message_id)
     if call.data == 'breakfast':
-        bot.send_message(call.message.chat.id, "You selected: Чё на завтрак")
+        bot.send_message(call.message.chat.id, "Вы выбрали: Чё на завтрак")
     elif call.data == 'lunch':
-        bot.send_message(call.message.chat.id, "You selected: Чё на обед")
+        bot.send_message(call.message.chat.id, "Вы выбрали: Чё на обед")
     elif call.data == 'dinner':
-        bot.send_message(call.message.chat.id, "You selected: Чё на ужин")
+        bot.send_message(call.message.chat.id, "Вы выбрали: Чё на ужин")
     elif call.data == 'snack':
-        bot.send_message(call.message.chat.id, "You selected: Чё перекусить")
+        bot.send_message(call.message.chat.id, "Вы выбрали: Чё перекусить")
+    cuisine()
 
+
+def cuisine():
+    global old
+    # Create the keyboard with the four buttons
     keyboard = types.InlineKeyboardMarkup()
-    russia_button = types.InlineKeyboardButton("Русская кухня", callback_data='ru')
+    ru_button = types.InlineKeyboardButton("Русская кухня", callback_data='ru')
     usa_button = types.InlineKeyboardButton("Американская кухня", callback_data='usa')
-    english_button = types.InlineKeyboardButton("Английская кухня", callback_data='uk')
-    france_button = types.InlineKeyboardButton("Французская кухня", callback_data='fr')
-    keyboard.row(russia_button)
+    uk_button = types.InlineKeyboardButton("Английская кухня", callback_data='uk')
+    fr_button = types.InlineKeyboardButton("Французская кухня", callback_data='fr')
+    keyboard.row(ru_button)
     keyboard.row(usa_button)
-    keyboard.row(english_button)
-    keyboard.row(france_button)
+    keyboard.row(uk_button)
+    keyboard.row(fr_button)
+
+    # Send the message with the keyboard
+    old = bot.send_message(CHAT_ID, 'Выберите кухню:', reply_markup=keyboard)
 
 
-@bot.callback_query_handler(func=lambda call: True)
+@bot.callback_query_handler(func=lambda callback: callback.data in ['ru', 'usa', 'uk', 'fr'])
 def dish(call):
+    bot.delete_message(old.chat.id, old.message_id)
     if call.data == 'ru':
-        bot.send_message(call.message.chat.id, "You selected: RU")
+        bot.send_message(call.message.chat.id, "Вы выбрали: RU")
     elif call.data == 'usa':
-        bot.send_message(call.message.chat.id, "You selected: USA")
+        bot.send_message(call.message.chat.id, "Вы выбрали: USA")
     elif call.data == 'uk':
-        bot.send_message(call.message.chat.id, "You selected: UK")
+        bot.send_message(call.message.chat.id, "Вы выбрали: UK")
     elif call.data == 'fr':
-        bot.send_message(call.message.chat.id, "You selected: FR")
+        bot.send_message(call.message.chat.id, "Вы выбрали: FR")
 
 
 # Start the bot
