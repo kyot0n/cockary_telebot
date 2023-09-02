@@ -114,7 +114,7 @@ def dish():
 
 @bot.callback_query_handler(func=lambda callback: callback.data in ['dish1', 'dish2', 'dish3', 'dish4'])
 def dish_choice(call):
-    global time, cuisine, dish
+    global old, time, cuisine, dish
     dish = call.data
     # Delete last message from bot
     bot.delete_message(old.chat.id, old.message_id)
