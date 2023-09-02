@@ -33,6 +33,24 @@ def start(message):
     old = bot.send_message(message.chat.id, 'Выберите:', reply_markup=keyboard)
 
 
+# Cusine selection function
+def cuisine_func():
+    global old
+    # Create the keyboard with the four buttons
+    keyboard = types.InlineKeyboardMarkup()
+    ru_button = types.InlineKeyboardButton("Русская кухня", callback_data='ru')
+    usa_button = types.InlineKeyboardButton("Американская кухня", callback_data='usa')
+    uk_button = types.InlineKeyboardButton("Английская кухня", callback_data='uk')
+    fr_button = types.InlineKeyboardButton("Французская кухня", callback_data='fr')
+    keyboard.row(ru_button)
+    keyboard.row(usa_button)
+    keyboard.row(uk_button)
+    keyboard.row(fr_button)
+
+    # Send the message with the keyboard
+    old = bot.send_message(CHAT_ID, 'Выберите кухню:', reply_markup=keyboard)
+
+
 @bot.callback_query_handler(func=lambda callback: callback.data in ['breakfast', 'lunch', 'dinner', 'snack'])
 def start_choice(call):
     global time
@@ -52,24 +70,25 @@ def start_choice(call):
         bot.send_message(call.message.chat.id, "Вы выбрали: Чё перекусить")
         time = 'snack'
 
-    cuisine()
+    cuisine_func()
 
-# Cusine selection function
-def cuisine():
+
+# Dish selection function
+def dish_func():
     global old
     # Create the keyboard with the four buttons
     keyboard = types.InlineKeyboardMarkup()
-    ru_button = types.InlineKeyboardButton("Русская кухня", callback_data='ru')
-    usa_button = types.InlineKeyboardButton("Американская кухня", callback_data='usa')
-    uk_button = types.InlineKeyboardButton("Английская кухня", callback_data='uk')
-    fr_button = types.InlineKeyboardButton("Французская кухня", callback_data='fr')
-    keyboard.row(ru_button)
-    keyboard.row(usa_button)
-    keyboard.row(uk_button)
-    keyboard.row(fr_button)
+    d1_button = types.InlineKeyboardButton("БЛЮДО1", callback_data='dish1')
+    d2_button = types.InlineKeyboardButton("БЛЮДО2", callback_data='dish2')
+    d3_button = types.InlineKeyboardButton("БЛЮДО3", callback_data='dish3')
+    d4_button = types.InlineKeyboardButton("БЛЮДО4", callback_data='dish4')
+    keyboard.row(d1_button)
+    keyboard.row(d2_button)
+    keyboard.row(d3_button)
+    keyboard.row(d4_button)
 
     # Send the message with the keyboard
-    old = bot.send_message(CHAT_ID, 'Выберите кухню:', reply_markup=keyboard)
+    old = bot.send_message(CHAT_ID, 'Выберите блюдо:', reply_markup=keyboard)
 
 
 @bot.callback_query_handler(func=lambda callback: callback.data in ['ru', 'usa', 'uk', 'fr'])
@@ -91,25 +110,7 @@ def cuisine_choice(call):
         bot.send_message(call.message.chat.id, "Вы выбрали: Французскую кухню")
         cuisine = 'fr'
 
-    dish()
-
-
-# Dish selection function
-def dish():
-    global old
-    # Create the keyboard with the four buttons
-    keyboard = types.InlineKeyboardMarkup()
-    d1_button = types.InlineKeyboardButton("БЛЮДО1", callback_data='dish1')
-    d2_button = types.InlineKeyboardButton("БЛЮДО2", callback_data='dish2')
-    d3_button = types.InlineKeyboardButton("БЛЮДО3", callback_data='dish3')
-    d4_button = types.InlineKeyboardButton("БЛЮДО4", callback_data='dish4')
-    keyboard.row(d1_button)
-    keyboard.row(d2_button)
-    keyboard.row(d3_button)
-    keyboard.row(d4_button)
-
-    # Send the message with the keyboard
-    old = bot.send_message(CHAT_ID, 'Выберите блюдо:', reply_markup=keyboard)
+    dish_func()
 
 
 @bot.callback_query_handler(func=lambda callback: callback.data in ['dish1', 'dish2', 'dish3', 'dish4'])
