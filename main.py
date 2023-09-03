@@ -1,6 +1,3 @@
-from background import keep_alive
-import pip
-pip.main(['install', 'pytelegrambotapi'])
 import telebot
 from telebot import types
 
@@ -125,5 +122,4 @@ def dish_choice(call):
 
 
 # Start the bot
-keep_alive()
 bot.polling(non_stop=True, interval=0)
